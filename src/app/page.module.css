@@ -5,6 +5,14 @@
 	gap: 2rem;
 }
 
-.title {
-  font-size: 3rem;
+.wordsContainer {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 1rem;
+}
+
+@media (max-width: 768px) {
+	.container {
+		padding: 1rem;
+	}
 }

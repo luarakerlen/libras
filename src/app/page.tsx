@@ -28,12 +28,8 @@ export default function Home() {
 				</div>
 			)}
 
-			<div
-				style={{
-					display: 'flex',
-					gap: '1rem',
-				}}
-			>
+			<h2>Palavras aprendidas</h2>
+			<div className={styles.wordsContainer}>
 				{filteredWords.map((word) => (
 					<Word key={word.term} word={word.term} />
 				))}
