@@ -4,23 +4,23 @@ import { useWords } from './useWords';
 import { TODAS } from '../constants';
 
 interface FilterProps {
-	category: string;
+	selectedCategory: string;
 }
 
-export function useFilter({ category }: FilterProps) {
-	const { availableWords } = useWords();
+export function useFilter({ selectedCategory }: FilterProps) {
+	const { words } = useWords();
 	const [filteredWords, setFilteredWords] = useState<Word[]>([]);
 
 	useEffect(() => {
-		if (category === TODAS) {
-			setFilteredWords(availableWords);
+		if (selectedCategory === TODAS) {
+			setFilteredWords(words);
 		} else {
-			const filtered = availableWords.filter((word) =>
-				word.categories.includes(category.toLowerCase())
+			const filtered = words.filter((word) =>
+				word.categories.includes(selectedCategory.toLowerCase())
 			);
 			setFilteredWords(filtered);
 		}
-	}, [category, availableWords]);
+	}, [selectedCategory, words]);
 
 	return { filteredWords };
 }

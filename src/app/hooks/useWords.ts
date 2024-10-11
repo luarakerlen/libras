@@ -5,7 +5,6 @@ import db from '../../../configuration';
 
 export function useWords() {
 	const [words, setWords] = useState<Word[]>([]);
-	const [availableWords, setAvailableWords] = useState<Word[]>([]);
 	const [categories, setCategories] = useState<string[]>(['todas']);
 
 	function getCategories(words: Word[]) {
@@ -30,12 +29,11 @@ export function useWords() {
 			);
 
 			setWords(wordsData);
-			setAvailableWords(wordsData);
 			getCategories(wordsData);
 		};
 
 		fetchWords();
 	}, []);
 
-	return { availableWords, categories };
+	return { words, categories };
 }
