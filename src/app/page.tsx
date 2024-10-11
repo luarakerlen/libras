@@ -7,8 +7,8 @@ export default function Home() {
 	const { words } = useWords();
 
 	return (
-		<div>
-			<h1>Palavras aprendidas</h1>
+		<div className={styles.container}>
+			<h1 className={styles.title}>Palavras aprendidas</h1>
 			<div
 				style={{
 					display: 'flex',
