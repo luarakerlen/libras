@@ -1,9 +1,10 @@
 'use client';
 import { useState } from 'react';
-import { Header, Word } from './components';
+import { Word } from './components';
 import styles from './page.module.css';
 import { useFilter } from './hooks/useFilter';
 import { TODAS } from './constants';
+import { Header } from './sections';
 
 export default function Home() {
 	const [selectedCategory, setSelectedCategory] = useState<string>(TODAS);

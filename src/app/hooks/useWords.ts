@@ -37,5 +37,5 @@ export function useWords() {
 		fetchWords();
 	}, []);
 
-	return { words, availableWords, setAvailableWords, categories };
+	return { availableWords, categories };
 }

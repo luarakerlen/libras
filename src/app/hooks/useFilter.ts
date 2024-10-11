@@ -8,7 +8,7 @@ interface FilterProps {
 }
 
 export function useFilter({ category }: FilterProps) {
-	const { availableWords, setAvailableWords } = useWords();
+	const { availableWords } = useWords();
 	const [filteredWords, setFilteredWords] = useState<Word[]>([]);
 
 	useEffect(() => {
