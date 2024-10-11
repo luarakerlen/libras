@@ -5,6 +5,22 @@ import db from '../../../configuration';
 
 export function useWords() {
 	const [words, setWords] = useState<Word[]>([]);
+	const [availableWords, setAvailableWords] = useState<Word[]>([]);
+	const [categories, setCategories] = useState<string[]>(['todas']);
+
+	function getCategories(words: Word[]) {
+		const availableCategories: string[] = [];
+
+		words.forEach((word) => {
+			word.categories.forEach((category) => {
+				if (!availableCategories.includes(category)) {
+					availableCategories.push(category);
+				}
+			});
+		});
+
+		setCategories([...categories, ...availableCategories]);
+	}
 
 	useEffect(() => {
 		const fetchWords = async () => {
@@ -14,10 +30,12 @@ export function useWords() {
 			);
 
 			setWords(wordsData);
+			setAvailableWords(wordsData);
+			getCategories(wordsData);
 		};
 
 		fetchWords();
 	}, []);
 
-	return { words };
+	return { words, availableWords, setAvailableWords, categories };
 }
