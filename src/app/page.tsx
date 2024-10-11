@@ -5,17 +5,29 @@ import styles from './page.module.css';
 import { useFilter } from './hooks/useFilter';
 import { TODAS } from './constants';
 import { Header } from './sections';
+import { Word as WordInterface } from './interfaces';
 
 export default function Home() {
 	const [selectedCategory, setSelectedCategory] = useState<string>(TODAS);
-	const { filteredWords } = useFilter({ category: selectedCategory });
+	const [randomWord, setRandomWord] = useState<WordInterface | null>(null);
+
+	const { filteredWords } = useFilter({ selectedCategory });
 
 	return (
 		<div className={styles.container}>
 			<Header
 				selectedCategory={selectedCategory}
 				setSelectedCategory={setSelectedCategory}
+				setRandomWord={setRandomWord}
 			/>
+
+			{randomWord && (
+				<div className={styles.randomWord}>
+					<h2>Palavra sorteada:</h2>
+					<Word word={randomWord.term} />
+				</div>
+			)}
+
 			<div
 				style={{
 					display: 'flex',
