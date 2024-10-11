@@ -1,0 +1,13 @@
+.title {
+  font-size: 3rem;
+}
+
+.text {
+  font-size: 1.5rem;
+}
+
+.filterContainer {
+  display: flex;
+  align-items: first baseline;
+  gap: 1rem;
+}
