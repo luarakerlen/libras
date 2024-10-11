@@ -1,21 +1,27 @@
 'use client';
-import { Word } from './components';
-import { useWords } from './hooks/useWords';
+import { useState } from 'react';
+import { Header, Word } from './components';
 import styles from './page.module.css';
+import { useFilter } from './hooks/useFilter';
+import { TODAS } from './constants';
 
 export default function Home() {
-	const { words } = useWords();
+	const [selectedCategory, setSelectedCategory] = useState<string>(TODAS);
+	const { filteredWords } = useFilter({ category: selectedCategory });
 
 	return (
 		<div className={styles.container}>
-			<h1 className={styles.title}>Palavras aprendidas</h1>
+			<Header
+				selectedCategory={selectedCategory}
+				setSelectedCategory={setSelectedCategory}
+			/>
 			<div
 				style={{
 					display: 'flex',
 					gap: '1rem',
 				}}
 			>
-				{words.map((word) => (
+				{filteredWords.map((word) => (
 					<Word key={word.term} word={word.term} />
 				))}
 			</div>
