@@ -10,6 +10,7 @@ import { Word as WordInterface } from './interfaces';
 export default function Home() {
 	const [selectedCategory, setSelectedCategory] = useState<string>(TODAS);
 	const [randomWord, setRandomWord] = useState<WordInterface | null>(null);
+	const [isAddingWord, setIsAddingWord] = useState<boolean>(false);
 
 	const { filteredWords } = useFilter({ selectedCategory });
 
@@ -19,9 +20,10 @@ export default function Home() {
 				selectedCategory={selectedCategory}
 				setSelectedCategory={setSelectedCategory}
 				setRandomWord={setRandomWord}
+				setIsAddingWord={setIsAddingWord}
 			/>
 
-			<AddWordForm />
+			{isAddingWord && <AddWordForm setIsAddingWord={setIsAddingWord} />}
 
 			{randomWord && (
 				<div className={styles.randomWord}>

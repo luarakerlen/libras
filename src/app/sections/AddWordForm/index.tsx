@@ -11,7 +11,11 @@ import { useWords } from '../../hooks';
 import { capitalize } from '../../utils';
 import styles from './styles.module.css';
 
-export function AddWordForm() {
+interface AddWordFormProps {
+	setIsAddingWord: (isAddingWord: boolean) => void;
+}
+
+export function AddWordForm({ setIsAddingWord }: AddWordFormProps) {
 	const { categories } = useWords();
 	const availableCategories = categories.filter(
 		(category) => category !== 'todas'
@@ -47,7 +51,7 @@ export function AddWordForm() {
 				<Button type='submit' variant='contained'>
 					Adicionar
 				</Button>
-				<Button>Cancelar</Button>
+				<Button onClick={() => setIsAddingWord(false)}>Cancelar</Button>
 			</div>
 		</div>
 	);

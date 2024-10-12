@@ -15,12 +15,14 @@ interface HeaderProps {
 	selectedCategory: string;
 	setSelectedCategory: (category: string) => void;
 	setRandomWord: (word: Word | null) => void;
+	setIsAddingWord: (isAddingWord: boolean) => void;
 }
 
 export function Header({
 	selectedCategory,
 	setSelectedCategory,
 	setRandomWord,
+	setIsAddingWord,
 }: HeaderProps) {
 	const { categories } = useWords();
 	const { filteredWords } = useFilter({ selectedCategory });
@@ -65,7 +67,11 @@ export function Header({
 				>
 					Sortear palavra
 				</Button>
-				<Button className={styles.button} variant='outlined'>
+				<Button
+					className={styles.button}
+					variant='outlined'
+					onClick={() => setIsAddingWord(true)}
+				>
 					Adicionar palavra
 				</Button>
 			</div>
