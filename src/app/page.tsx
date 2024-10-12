@@ -4,7 +4,7 @@ import { Word } from './components';
 import styles from './page.module.css';
 import { useFilter } from './hooks/useFilter';
 import { TODAS } from './constants';
-import { Header } from './sections';
+import { AddWordForm, Header } from './sections';
 import { Word as WordInterface } from './interfaces';
 
 export default function Home() {
@@ -20,6 +20,8 @@ export default function Home() {
 				setSelectedCategory={setSelectedCategory}
 				setRandomWord={setRandomWord}
 			/>
+
+			<AddWordForm />
 
 			{randomWord && (
 				<div className={styles.randomWord}>
