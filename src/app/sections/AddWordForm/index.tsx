@@ -12,6 +12,7 @@ import { capitalize } from '../../utils';
 import styles from './styles.module.css';
 import { useState } from 'react';
 import { Word } from '../../interfaces';
+import Swal from 'sweetalert2';
 
 interface AddWordFormProps {
 	setIsAddingWord: (isAddingWord: boolean) => void;
@@ -58,11 +59,19 @@ export function AddWordForm({ setIsAddingWord }: AddWordFormProps) {
 
 	const handleAddWord = () => {
 		if (!term) {
-			alert('Preencha o campo de palavra');
+			Swal.fire({
+				icon: 'error',
+				title: 'Oops...',
+				text: 'EPreencha o campo de palavra',
+			});
 			return;
 		}
 		if (words.find((word) => word.term.toLowerCase() === term.toLowerCase())) {
-			alert('Essa palavra já foi adicionada');
+			Swal.fire({
+				icon: 'error',
+				title: 'Oops...',
+				text: 'Essa palavra já foi adicionada!',
+			});
 			setIsAddingWord(false);
 			return;
 		}
@@ -72,9 +81,10 @@ export function AddWordForm({ setIsAddingWord }: AddWordFormProps) {
 		const newWord: Word = {
 			term,
 			categories: [...selectedCategories, ...wroteCategories],
-		}
+		};
 
 		addWord(newWord);
+		setIsAddingWord(false);
 	};
 
 	return (
