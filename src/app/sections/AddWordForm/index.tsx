@@ -10,23 +10,84 @@ import {
 import { useWords } from '../../hooks';
 import { capitalize } from '../../utils';
 import styles from './styles.module.css';
+import { useState } from 'react';
+import { Word } from '../../interfaces';
 
 interface AddWordFormProps {
 	setIsAddingWord: (isAddingWord: boolean) => void;
 }
 
 export function AddWordForm({ setIsAddingWord }: AddWordFormProps) {
-	const { categories } = useWords();
+	const [term, setTerm] = useState<string>('');
+	const [wroteCategories, setWroteCategories] = useState<string[]>([]);
+	const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
+	const [newCategories, setNewCategories] = useState<string[]>([]);
+
+	const { categories, words, addWord } = useWords();
 	const availableCategories = categories.filter(
 		(category) => category !== 'todas'
 	);
+
+	const handleAddCategories = (event: React.SyntheticEvent<Element, Event>) => {
+		const target = event.target as HTMLInputElement;
+
+		if (target.checked) {
+			setSelectedCategories([...selectedCategories, target.name]);
+		} else {
+			setSelectedCategories(
+				selectedCategories.filter((category) => category !== target.name)
+			);
+		}
+	};
+
+	const getWroteCategories = (wroteCategories: string) => {
+		if (!wroteCategories) {
+			return;
+		}
+
+		const categories = wroteCategories
+			.split(',')
+			.map((category) => category.trim());
+
+		const unrepeatedCategories = categories.filter(
+			(category) => !newCategories.includes(category)
+		);
+
+		setWroteCategories(unrepeatedCategories);
+	};
+
+	const handleAddWord = () => {
+		if (!term) {
+			alert('Preencha o campo de palavra');
+			return;
+		}
+		if (words.find((word) => word.term.toLowerCase() === term.toLowerCase())) {
+			alert('Essa palavra já foi adicionada');
+			setIsAddingWord(false);
+			return;
+		}
+
+		setNewCategories([...selectedCategories, ...wroteCategories]);
+
+		const newWord: Word = {
+			term,
+			categories: [...selectedCategories, ...wroteCategories],
+		}
+
+		addWord(newWord);
+	};
+
 	return (
 		<div>
 			<FormControl sx={{ width: '100%' }}>
 				<FormLabel htmlFor='word' required>
 					Palavra
 				</FormLabel>
-				<Input id='word' />
+				<Input
+					id='word'
+					value={term}
+					onChange={(e) => setTerm(e.target.value)}
+				/>
 			</FormControl>
 			<FormControl sx={{ mt: 2 }}>
 				<FormLabel htmlFor='categories'>Categorias</FormLabel>
@@ -34,8 +95,10 @@ export function AddWordForm({ setIsAddingWord }: AddWordFormProps) {
 					{availableCategories.map((category) => (
 						<FormControlLabel
 							key={category}
+							name={category}
 							control={<Checkbox />}
 							label={capitalize(category)}
+							onChange={(e) => handleAddCategories(e)}
 						/>
 					))}
 				</FormGroup>
@@ -44,11 +107,14 @@ export function AddWordForm({ setIsAddingWord }: AddWordFormProps) {
 				<FormLabel htmlFor='otherCategories'>
 					Outras categorias (separe por vírgulas)
 				</FormLabel>
-				<Input id='otherCategories' />
+				<Input
+					id='otherCategories'
+					onChange={(e) => getWroteCategories(e.target.value)}
+				/>
 			</FormControl>
 
 			<div className={styles.buttons}>
-				<Button type='submit' variant='contained'>
+				<Button type='submit' variant='contained' onClick={handleAddWord}>
 					Adicionar
 				</Button>
 				<Button onClick={() => setIsAddingWord(false)}>Cancelar</Button>

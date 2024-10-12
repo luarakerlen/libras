@@ -1,11 +1,24 @@
 import { useEffect, useState } from 'react';
 import { Word } from '../interfaces';
-import { collection, getDocs } from 'firebase/firestore';
+import { addDoc, collection, getDocs } from 'firebase/firestore';
 import db from '../../../configuration';
+import Swal from 'sweetalert2';
 
 export function useWords() {
 	const [words, setWords] = useState<Word[]>([]);
 	const [categories, setCategories] = useState<string[]>(['todas']);
+
+	async function addWord(newWord: Word) {
+		await addDoc(collection(db, 'words'), newWord);
+			setWords([newWord, ...words]);
+
+			Swal.fire({
+				icon: 'success',
+				title: 'Palavra adicionada com sucesso!',
+				showConfirmButton: false,
+				timer: 2000,
+			});
+	}
 
 	function getCategories(words: Word[]) {
 		const availableCategories: string[] = [];
@@ -35,5 +48,5 @@ export function useWords() {
 		fetchWords();
 	}, []);
 
-	return { words, categories };
+	return { words, categories, addWord };
 }

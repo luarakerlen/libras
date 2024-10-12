@@ -1,4 +1,4 @@
 export interface Word {
   term: string;
-  categories: [string];
+  categories: string[];
 }
