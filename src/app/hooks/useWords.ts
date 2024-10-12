@@ -10,14 +10,14 @@ export function useWords() {
 
 	async function addWord(newWord: Word) {
 		await addDoc(collection(db, 'words'), newWord);
-			setWords([newWord, ...words]);
+		setWords([newWord, ...words]);
 
-			Swal.fire({
-				icon: 'success',
-				title: 'Palavra adicionada com sucesso!',
-				showConfirmButton: false,
-				timer: 2000,
-			});
+		Swal.fire({
+			icon: 'success',
+			title: 'Palavra adicionada com sucesso!',
+			showConfirmButton: false,
+			timer: 2000,
+		});
 	}
 
 	function getCategories(words: Word[]) {
