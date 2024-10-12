@@ -62,7 +62,7 @@ export function AddWordForm({ setIsAddingWord }: AddWordFormProps) {
 			Swal.fire({
 				icon: 'error',
 				title: 'Oops...',
-				text: 'EPreencha o campo de palavra',
+				text: 'Preencha o campo de palavra',
 			});
 			return;
 		}
