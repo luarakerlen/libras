@@ -98,6 +98,7 @@ export function AddWordForm({
 		}
 
 		const newWord: Word = {
+			id: '',
 			term: term.toLowerCase(),
 			categories: normalizedCategories,
 		};

@@ -16,7 +16,10 @@ export function useWords() {
 	const [isLoading, setIsLoading] = useState(true);
 
 	async function addWord(newWord: Word) {
-		await addDoc(collection(db, 'words'), newWord);
+		await addDoc(collection(db, 'words'), {
+			term: newWord.term,
+			categories: newWord.categories,
+		});
 		setWords([newWord, ...words]);
 
 		Swal.fire({
