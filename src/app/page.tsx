@@ -40,7 +40,10 @@ export default function Home() {
 			{randomWord && (
 				<div className={styles.randomWord}>
 					<h2>Palavra sorteada:</h2>
-					<WordCard word={randomWord} deleteWord={deleteWord} />
+					<WordCard
+						word={randomWord}
+						canBeDeleted={false}
+					/>
 				</div>
 			)}
 

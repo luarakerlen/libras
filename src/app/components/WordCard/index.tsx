@@ -7,10 +7,11 @@ import { Word } from '../../interfaces';
 
 interface WordProps {
 	word: Word;
-	deleteWord: (id: string) => void;
+	canBeDeleted?: boolean;
+	deleteWord?: (id: string) => void;
 }
 
-export function WordCard({ word, deleteWord }: WordProps) {
+export function WordCard({ word, deleteWord, canBeDeleted = true }: WordProps) {
 	const [isMenuListOpen, setIsMenuListOpen] = useState<boolean>(false);
 	const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
 
@@ -25,7 +26,7 @@ export function WordCard({ word, deleteWord }: WordProps) {
 			cancelButtonText: 'Não',
 		}).then((result) => {
 			if (result.isConfirmed) {
-				deleteWord(word.id);
+				deleteWord!(word.id);
 				Swal.fire(
 					'Excluído!',
 					'A palavra foi excluída com sucesso.',
@@ -36,6 +37,7 @@ export function WordCard({ word, deleteWord }: WordProps) {
 	}
 
 	function handleClick(event: React.MouseEvent<HTMLDivElement>) {
+		if(!canBeDeleted) return;
 		setAnchorEl(event.currentTarget);
 		setIsMenuListOpen(true);
 	}
