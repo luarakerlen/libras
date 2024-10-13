@@ -32,7 +32,7 @@ export default function Home() {
 				</div>
 			)}
 
-			<h2>Palavras aprendidas</h2>
+			<h2>Palavras aprendidas ({filteredWords.length})</h2>
 			<div className={styles.wordsContainer}>
 				{filteredWords.map((word) => (
 					<Word key={word.term} word={word.term} />
