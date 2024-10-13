@@ -6,9 +6,11 @@ import {
 	deleteDoc,
 	doc,
 	getDocs,
+	updateDoc,
 } from 'firebase/firestore';
 import db from '../../../configuration';
 import Swal from 'sweetalert2';
+import { capitalize } from '../utils';
 
 export function useWords() {
 	const [words, setWords] = useState<Word[]>([]);
@@ -34,6 +36,40 @@ export function useWords() {
 		await deleteDoc(doc(db, 'words', wordId));
 		const updatedWords = words.filter((word) => word.id !== wordId);
 		setWords(updatedWords);
+
+		Swal.fire({
+			icon: 'success',
+			title: 'Palavra excluída com sucesso!',
+			showConfirmButton: false,
+			timer: 2000,
+		});
+	}
+
+	async function editWordCategories(updatedWord: Word, categories: string[]) {
+		await updateDoc(doc(db, 'words', updatedWord.id), {
+			categories,
+		});
+
+		const updatedWords = words.map((word) => {
+			if (word.id === updatedWord.id) {
+				return {
+					...word,
+					categories,
+				};
+			}
+
+			return word;
+		});
+		setWords(updatedWords);
+
+		Swal.fire({
+			icon: 'success',
+			title: `Categorias da palavra ${capitalize(
+				updatedWord.term
+			)} atualizadas com sucesso!`,
+			showConfirmButton: false,
+			timer: 2000,
+		});
 	}
 
 	function getCategories(words: Word[]) {
@@ -75,5 +111,12 @@ export function useWords() {
 		fetchWords();
 	}, []);
 
-	return { words, categories, addWord, isLoading, deleteWord };
+	return {
+		words,
+		categories,
+		addWord,
+		isLoading,
+		deleteWord,
+		editWordCategories,
+	};
 }

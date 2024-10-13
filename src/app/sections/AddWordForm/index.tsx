@@ -7,7 +7,7 @@ import {
 	FormLabel,
 	Input,
 } from '@mui/material';
-import { capitalize } from '../../utils';
+import { capitalize, removeDuplication } from '../../utils';
 import styles from './styles.module.css';
 import { useState } from 'react';
 import { Word } from '../../interfaces';
@@ -29,7 +29,6 @@ export function AddWordForm({
 	const [term, setTerm] = useState<string>('');
 	const [wroteCategories, setWroteCategories] = useState<string[]>([]);
 	const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
-	const [newCategories, setNewCategories] = useState<string[]>([]);
 
 	const availableCategories = categories.filter(
 		(category) => category !== 'todas'
@@ -39,10 +38,12 @@ export function AddWordForm({
 		const target = event.target as HTMLInputElement;
 
 		if (target.checked) {
-			setSelectedCategories([...selectedCategories, target.name]);
+			setSelectedCategories([...selectedCategories, target.name.toLowerCase()]);
 		} else {
 			setSelectedCategories(
-				selectedCategories.filter((category) => category !== target.name)
+				selectedCategories.filter(
+					(category) => category.toLowerCase() !== target.name.toLowerCase()
+				)
 			);
 		}
 	};
@@ -54,22 +55,14 @@ export function AddWordForm({
 
 		const categories = wroteCategories
 			.split(',')
-			.map((category) => category.trim());
+			.map((category) => category.trim().toLowerCase());
 
-		const unrepeatedCategories = categories.filter(
-			(category) => !newCategories.includes(category)
-		);
-
-		setWroteCategories(unrepeatedCategories);
+		setWroteCategories(categories);
 	};
 
 	const handleAddWord = () => {
 		const categories = [...selectedCategories, ...wroteCategories];
-		const normalizedCategories = categories.map((category) =>
-			category.toLowerCase()
-		);
-
-		setNewCategories(normalizedCategories);
+		const unrepeatedCategories = removeDuplication(categories);
 
 		if (!term) {
 			Swal.fire({
@@ -100,7 +93,7 @@ export function AddWordForm({
 		const newWord: Word = {
 			id: '',
 			term: term.toLowerCase(),
-			categories: normalizedCategories,
+			categories: unrepeatedCategories,
 		};
 
 		addWord(newWord);

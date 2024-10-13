@@ -14,7 +14,14 @@ export default function Home() {
 	const [randomWord, setRandomWord] = useState<WordInterface | null>(null);
 	const [isAddingWord, setIsAddingWord] = useState<boolean>(false);
 
-	const { words, categories, addWord, isLoading, deleteWord } = useWords();
+	const {
+		words,
+		categories,
+		addWord,
+		isLoading,
+		deleteWord,
+		editWordCategories,
+	} = useWords();
 	const { filteredWords } = useFilter({ selectedCategory, words });
 
 	return (
@@ -43,6 +50,8 @@ export default function Home() {
 					<WordCard
 						word={randomWord}
 						canBeDeleted={false}
+						categories={categories}
+						editWordCategories={editWordCategories}
 					/>
 				</div>
 			)}
@@ -62,7 +71,13 @@ export default function Home() {
 			) : (
 				<div className={styles.wordsContainer}>
 					{filteredWords.map((word) => (
-						<WordCard key={word.id} word={word} deleteWord={deleteWord} />
+						<WordCard
+							key={word.id}
+							word={word}
+							deleteWord={deleteWord}
+							categories={categories}
+							editWordCategories={editWordCategories}
+						/>
 					))}
 				</div>
 			)}

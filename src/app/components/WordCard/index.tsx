@@ -4,16 +4,26 @@ import styles from './styles.module.css';
 import { WordMenuList } from '../WordMenuList';
 import Swal from 'sweetalert2';
 import { Word } from '../../interfaces';
+import { EditWordModal } from '../EditWordModal';
 
 interface WordProps {
 	word: Word;
 	canBeDeleted?: boolean;
 	deleteWord?: (id: string) => void;
+	categories: string[];
+	editWordCategories: (word: Word, categories: string[]) => void;
 }
 
-export function WordCard({ word, deleteWord, canBeDeleted = true }: WordProps) {
+export function WordCard({
+	word,
+	deleteWord,
+	canBeDeleted = true,
+	categories,
+	editWordCategories,
+}: WordProps) {
 	const [isMenuListOpen, setIsMenuListOpen] = useState<boolean>(false);
 	const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
+	const [isEditModalOpen, setIsEditModalOpen] = useState<boolean>(false);
 
 	function handleDeleteWord() {
 		setIsMenuListOpen(false);
@@ -36,8 +46,13 @@ export function WordCard({ word, deleteWord, canBeDeleted = true }: WordProps) {
 		});
 	}
 
+	function handleEditWord() {
+		setIsMenuListOpen(false);
+		setIsEditModalOpen(true);
+	}
+
 	function handleClick(event: React.MouseEvent<HTMLDivElement>) {
-		if(!canBeDeleted) return;
+		if (!canBeDeleted) return;
 		setAnchorEl(event.currentTarget);
 		setIsMenuListOpen(true);
 	}
@@ -56,10 +71,18 @@ export function WordCard({ word, deleteWord, canBeDeleted = true }: WordProps) {
 				<WordMenuList
 					isOpen={isMenuListOpen}
 					onClose={handleClose}
-					onDeleteWord={handleDeleteWord}
+					handleDelete={handleDeleteWord}
 					anchorEl={anchorEl}
+					handleEdit={handleEditWord}
 				/>
 			)}
+			<EditWordModal
+				word={word}
+				categories={categories}
+				editWordCategories={editWordCategories}
+				isOpen={isEditModalOpen}
+				onClose={() => setIsEditModalOpen(false)}
+			/>
 		</>
 	);
 }
