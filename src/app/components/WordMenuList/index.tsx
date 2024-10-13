@@ -1,12 +1,5 @@
-import {
-	ListItemIcon,
-	ListItemText,
-	MenuItem,
-	Menu,
-	Paper,
-} from '@mui/material';
+import { ListItemIcon, ListItemText, MenuItem, Menu } from '@mui/material';
 import { Delete } from '@mui/icons-material';
-import styles from './styles.module.css';
 
 interface WordMenuListProps {
 	isOpen: boolean;
