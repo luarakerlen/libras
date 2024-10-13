@@ -30,6 +30,9 @@ export function AddWordForm({
 	const [wroteCategories, setWroteCategories] = useState<string[]>([]);
 	const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
 
+	const hasAnyCategory =
+		selectedCategories.length > 0 || wroteCategories.length > 0;
+
 	const availableCategories = categories.filter(
 		(category) => category !== 'todas'
 	);
@@ -113,7 +116,12 @@ export function AddWordForm({
 				/>
 			</FormControl>
 			<FormControl sx={{ mt: 2 }}>
-				<FormLabel htmlFor='categories'>Categorias</FormLabel>
+				<FormLabel
+					htmlFor='categories'
+					required={!hasAnyCategory || selectedCategories.length > 0}
+				>
+					Categorias
+				</FormLabel>
 				<FormGroup sx={{ flexDirection: 'row' }}>
 					{availableCategories.map((category) => (
 						<FormControlLabel
@@ -127,7 +135,10 @@ export function AddWordForm({
 				</FormGroup>
 			</FormControl>
 			<FormControl sx={{ width: '100%', mt: 2 }}>
-				<FormLabel htmlFor='otherCategories'>
+				<FormLabel
+					htmlFor='otherCategories'
+					required={!hasAnyCategory || wroteCategories.length > 0}
+				>
 					Outras categorias (separe por vírgulas)
 				</FormLabel>
 				<Input
