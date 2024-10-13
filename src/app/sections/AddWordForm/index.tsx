@@ -76,11 +76,14 @@ export function AddWordForm({ setIsAddingWord }: AddWordFormProps) {
 			return;
 		}
 
-		setNewCategories([...selectedCategories, ...wroteCategories]);
+		const categories = [...selectedCategories, ...wroteCategories];
+		const normalizedCategories = categories.map((category) => category.toLowerCase());
+
+		setNewCategories(normalizedCategories);
 
 		const newWord: Word = {
-			term,
-			categories: [...selectedCategories, ...wroteCategories],
+			term: term.toLowerCase(),
+			categories: normalizedCategories,
 		};
 
 		addWord(newWord);
