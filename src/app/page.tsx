@@ -7,13 +7,14 @@ import { TODAS } from './constants';
 import { AddWordForm, Header } from './sections';
 import { Word as WordInterface } from './interfaces';
 import { useWords } from './hooks';
+import { CircularProgress } from '@mui/material';
 
 export default function Home() {
 	const [selectedCategory, setSelectedCategory] = useState<string>(TODAS);
 	const [randomWord, setRandomWord] = useState<WordInterface | null>(null);
 	const [isAddingWord, setIsAddingWord] = useState<boolean>(false);
 
-	const { words, categories, addWord } = useWords();
+	const { words, categories, addWord, isLoading } = useWords();
 	const { filteredWords } = useFilter({ selectedCategory, words });
 
 	return (
@@ -43,12 +44,23 @@ export default function Home() {
 				</div>
 			)}
 
-			<h2>Palavras aprendidas ({filteredWords.length})</h2>
-			<div className={styles.wordsContainer}>
-				{filteredWords.map((word) => (
-					<Word key={word.term} word={word.term} />
-				))}
-			</div>
+			<h2>Palavras aprendidas {!isLoading && `(${filteredWords.length})`}</h2>
+			{isLoading ? (
+				<div style={{
+					flex: 1,
+					display: 'flex',
+					justifyContent: 'center',
+					alignItems: 'center',
+				}}>
+					<CircularProgress />
+				</div>
+			) : (
+				<div className={styles.wordsContainer}>
+					{filteredWords.map((word) => (
+						<Word key={word.term} word={word.term} />
+					))}
+				</div>
+			)}
 		</div>
 	);
 }

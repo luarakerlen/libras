@@ -7,6 +7,7 @@ import Swal from 'sweetalert2';
 export function useWords() {
 	const [words, setWords] = useState<Word[]>([]);
 	const [categories, setCategories] = useState<string[]>(['todas']);
+	const [isLoading, setIsLoading] = useState(true);
 
 	async function addWord(newWord: Word) {
 		await addDoc(collection(db, 'words'), newWord);
@@ -35,6 +36,7 @@ export function useWords() {
 	}
 
 	useEffect(() => {
+		setIsLoading(true);
 		const fetchWords = async () => {
 			const querySnapshot = await getDocs(collection(db, 'words'));
 			const wordsData: Word[] = querySnapshot.docs.map(
@@ -46,10 +48,14 @@ export function useWords() {
 			);
 			setWords(orderedWords);
 			getCategories(orderedWords);
+
+			if(!!wordsData) {
+				setIsLoading(false);
+			}
 		};
 
 		fetchWords();
 	}, []);
 
-	return { words, categories, addWord };
+	return { words, categories, addWord, isLoading };
 }
