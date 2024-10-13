@@ -6,12 +6,12 @@ import {
 	Select,
 } from '@mui/material';
 import styles from './styles.module.css';
-import { useWords } from '../../hooks';
 import { capitalize } from '../../utils';
 import { Word } from '../../interfaces';
-import { useFilter } from '../../hooks/useFilter';
 
 interface HeaderProps {
+	filteredWords: Word[];
+	categories: string[];
 	selectedCategory: string;
 	setSelectedCategory: (category: string) => void;
 	setRandomWord: (word: Word | null) => void;
@@ -19,14 +19,13 @@ interface HeaderProps {
 }
 
 export function Header({
+	filteredWords,
+	categories,
 	selectedCategory,
 	setSelectedCategory,
 	setRandomWord,
 	setIsAddingWord,
 }: HeaderProps) {
-	const { categories } = useWords();
-	const { filteredWords } = useFilter({ selectedCategory });
-
 	function handleSelectCategory(category: string) {
 		setSelectedCategory(category);
 		setRandomWord(null);

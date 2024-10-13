@@ -1,14 +1,13 @@
 import { useEffect, useState } from 'react';
 import { Word } from '../interfaces';
-import { useWords } from './useWords';
 import { TODAS } from '../constants';
 
 interface FilterProps {
+	words: Word[];
 	selectedCategory: string;
 }
 
-export function useFilter({ selectedCategory }: FilterProps) {
-	const { words } = useWords();
+export function useFilter({ words, selectedCategory }: FilterProps) {
 	const [filteredWords, setFilteredWords] = useState<Word[]>([]);
 
 	useEffect(() => {

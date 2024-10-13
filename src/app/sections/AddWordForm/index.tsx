@@ -7,7 +7,6 @@ import {
 	FormLabel,
 	Input,
 } from '@mui/material';
-import { useWords } from '../../hooks';
 import { capitalize } from '../../utils';
 import styles from './styles.module.css';
 import { useState } from 'react';
@@ -15,16 +14,23 @@ import { Word } from '../../interfaces';
 import Swal from 'sweetalert2';
 
 interface AddWordFormProps {
+	words: Word[];
+	categories: string[];
+	addWord: (word: Word) => void;
 	setIsAddingWord: (isAddingWord: boolean) => void;
 }
 
-export function AddWordForm({ setIsAddingWord }: AddWordFormProps) {
+export function AddWordForm({
+	words,
+	categories,
+	addWord,
+	setIsAddingWord,
+}: AddWordFormProps) {
 	const [term, setTerm] = useState<string>('');
 	const [wroteCategories, setWroteCategories] = useState<string[]>([]);
 	const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
 	const [newCategories, setNewCategories] = useState<string[]>([]);
 
-	const { categories, words, addWord } = useWords();
 	const availableCategories = categories.filter(
 		(category) => category !== 'todas'
 	);
@@ -59,7 +65,9 @@ export function AddWordForm({ setIsAddingWord }: AddWordFormProps) {
 
 	const handleAddWord = () => {
 		const categories = [...selectedCategories, ...wroteCategories];
-		const normalizedCategories = categories.map((category) => category.toLowerCase());
+		const normalizedCategories = categories.map((category) =>
+			category.toLowerCase()
+		);
 
 		setNewCategories(normalizedCategories);
 
