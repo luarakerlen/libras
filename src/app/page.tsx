@@ -7,12 +7,13 @@ import { TODAS } from './constants';
 import { AddWordForm, Header } from './sections';
 import { Word as WordInterface } from './interfaces';
 import { useWords } from './hooks';
-import { CircularProgress } from '@mui/material';
+import { CircularProgress, FormControl, TextField } from '@mui/material';
 
 export default function Home() {
 	const [selectedCategory, setSelectedCategory] = useState<string>(TODAS);
 	const [randomWord, setRandomWord] = useState<WordInterface | null>(null);
 	const [isAddingWord, setIsAddingWord] = useState<boolean>(false);
+	const [searchedWord, setSearchedWord] = useState<string>('');
 
 	const {
 		words,
@@ -22,7 +23,7 @@ export default function Home() {
 		deleteWord,
 		editWordCategories,
 	} = useWords();
-	const { filteredWords } = useFilter({ selectedCategory, words });
+	const { filteredWords, searchedWords } = useFilter({ selectedCategory, words, searchedWord });
 
 	return (
 		<div className={styles.container}>
@@ -69,17 +70,28 @@ export default function Home() {
 					<CircularProgress />
 				</div>
 			) : (
-				<div className={styles.wordsContainer}>
-					{filteredWords.map((word) => (
-						<WordCard
-							key={word.id}
-							word={word}
-							deleteWord={deleteWord}
-							categories={categories}
-							editWordCategories={editWordCategories}
+				<>
+					<FormControl>
+						<TextField
+							sx={{ mt: -2, mb: -2 }}
+							id='search'
+							label='Pesquisar palavra'
+							value={searchedWord}
+							onChange={(e) => setSearchedWord(e.target.value)}
 						/>
-					))}
-				</div>
+					</FormControl>
+					<div className={styles.wordsContainer}>
+						{searchedWords.map((word) => (
+							<WordCard
+								key={word.id}
+								word={word}
+								deleteWord={deleteWord}
+								categories={categories}
+								editWordCategories={editWordCategories}
+							/>
+						))}
+					</div>
+				</>
 			)}
 		</div>
 	);
