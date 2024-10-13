@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { Word } from '../interfaces';
 import { TODAS } from '../constants';
 
@@ -8,20 +8,27 @@ interface FilterProps {
 	searchedWord: string;
 }
 
-export function useFilter({ words, selectedCategory, searchedWord }: FilterProps) {
+export function useFilter({
+	words,
+	selectedCategory,
+	searchedWord,
+}: FilterProps) {
 	const [filteredWords, setFilteredWords] = useState<Word[]>([]);
 	const [searchedWords, setSearchedWords] = useState<Word[]>([]);
 
-	function searchWords(availableWords: Word[]) {
-		if (!!searchedWord) {
-			const searched = availableWords.filter((word) =>
-				word.term.toLowerCase().includes(searchedWord.toLowerCase())
-			);
-			setSearchedWords(searched);
-		} else {
-			setSearchedWords(availableWords);
-		}
-	}
+	const searchWords = useCallback(
+		(availableWords: Word[]) => {
+			if (!!searchedWord) {
+				const searched = availableWords.filter((word) =>
+					word.term.toLowerCase().includes(searchedWord.toLowerCase())
+				);
+				setSearchedWords(searched);
+			} else {
+				setSearchedWords(availableWords);
+			}
+		},
+		[searchedWord]
+	);
 
 	useEffect(() => {
 		if (selectedCategory === TODAS) {
@@ -34,7 +41,7 @@ export function useFilter({ words, selectedCategory, searchedWord }: FilterProps
 			setFilteredWords(filtered);
 			searchWords(filtered);
 		}
-	}, [selectedCategory, words]);
+	}, [selectedCategory, words, searchedWord]);
 
 	return { filteredWords, searchedWords };
 }
