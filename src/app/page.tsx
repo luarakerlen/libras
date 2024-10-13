@@ -1,6 +1,6 @@
 'use client';
 import { useState } from 'react';
-import { Word } from './components';
+import { WordCard } from './components';
 import styles from './page.module.css';
 import { useFilter } from './hooks/useFilter';
 import { TODAS } from './constants';
@@ -14,7 +14,7 @@ export default function Home() {
 	const [randomWord, setRandomWord] = useState<WordInterface | null>(null);
 	const [isAddingWord, setIsAddingWord] = useState<boolean>(false);
 
-	const { words, categories, addWord, isLoading } = useWords();
+	const { words, categories, addWord, isLoading, deleteWord } = useWords();
 	const { filteredWords } = useFilter({ selectedCategory, words });
 
 	return (
@@ -40,24 +40,26 @@ export default function Home() {
 			{randomWord && (
 				<div className={styles.randomWord}>
 					<h2>Palavra sorteada:</h2>
-					<Word word={randomWord.term} />
+					<WordCard word={randomWord} deleteWord={deleteWord} />
 				</div>
 			)}
 
 			<h2>Palavras aprendidas {!isLoading && `(${filteredWords.length})`}</h2>
 			{isLoading ? (
-				<div style={{
-					flex: 1,
-					display: 'flex',
-					justifyContent: 'center',
-					alignItems: 'center',
-				}}>
+				<div
+					style={{
+						flex: 1,
+						display: 'flex',
+						justifyContent: 'center',
+						alignItems: 'center',
+					}}
+				>
 					<CircularProgress />
 				</div>
 			) : (
 				<div className={styles.wordsContainer}>
 					{filteredWords.map((word) => (
-						<Word key={word.term} word={word.term} />
+						<WordCard key={word.id} word={word} deleteWord={deleteWord} />
 					))}
 				</div>
 			)}

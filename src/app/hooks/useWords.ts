@@ -1,6 +1,12 @@
 import { useEffect, useState } from 'react';
 import { Word } from '../interfaces';
-import { addDoc, collection, getDocs } from 'firebase/firestore';
+import {
+	addDoc,
+	collection,
+	deleteDoc,
+	doc,
+	getDocs,
+} from 'firebase/firestore';
 import db from '../../../configuration';
 import Swal from 'sweetalert2';
 
@@ -21,6 +27,12 @@ export function useWords() {
 		});
 	}
 
+	async function deleteWord(wordId: string) {
+		await deleteDoc(doc(db, 'words', wordId));
+		const updatedWords = words.filter((word) => word.id !== wordId);
+		setWords(updatedWords);
+	}
+
 	function getCategories(words: Word[]) {
 		const availableCategories: string[] = [];
 
@@ -39,9 +51,12 @@ export function useWords() {
 		setIsLoading(true);
 		const fetchWords = async () => {
 			const querySnapshot = await getDocs(collection(db, 'words'));
-			const wordsData: Word[] = querySnapshot.docs.map(
-				(doc) => doc.data() as Word
-			);
+			const wordsData: Word[] = querySnapshot.docs.map((doc) => {
+				return {
+					id: doc.id,
+					...doc.data(),
+				} as Word;
+			});
 
 			const orderedWords = wordsData.sort((a, b) =>
 				a.term.localeCompare(b.term)
@@ -49,7 +64,7 @@ export function useWords() {
 			setWords(orderedWords);
 			getCategories(orderedWords);
 
-			if(!!wordsData) {
+			if (!!wordsData) {
 				setIsLoading(false);
 			}
 		};
@@ -57,5 +72,5 @@ export function useWords() {
 		fetchWords();
 	}, []);
 
-	return { words, categories, addWord, isLoading };
+	return { words, categories, addWord, isLoading, deleteWord };
 }
