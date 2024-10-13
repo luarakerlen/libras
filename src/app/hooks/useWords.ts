@@ -41,8 +41,11 @@ export function useWords() {
 				(doc) => doc.data() as Word
 			);
 
-			setWords(wordsData);
-			getCategories(wordsData);
+			const orderedWords = wordsData.sort((a, b) =>
+				a.term.localeCompare(b.term)
+			);
+			setWords(orderedWords);
+			getCategories(orderedWords);
 		};
 
 		fetchWords();
