@@ -58,11 +58,24 @@ export function AddWordForm({ setIsAddingWord }: AddWordFormProps) {
 	};
 
 	const handleAddWord = () => {
+		const categories = [...selectedCategories, ...wroteCategories];
+		const normalizedCategories = categories.map((category) => category.toLowerCase());
+
+		setNewCategories(normalizedCategories);
+
 		if (!term) {
 			Swal.fire({
 				icon: 'error',
 				title: 'Oops...',
 				text: 'Preencha o campo de palavra',
+			});
+			return;
+		}
+		if (categories.length === 0) {
+			Swal.fire({
+				icon: 'error',
+				title: 'Oops...',
+				text: 'Selecione ou escreva pelo menos uma categoria',
 			});
 			return;
 		}
@@ -75,11 +88,6 @@ export function AddWordForm({ setIsAddingWord }: AddWordFormProps) {
 			setIsAddingWord(false);
 			return;
 		}
-
-		const categories = [...selectedCategories, ...wroteCategories];
-		const normalizedCategories = categories.map((category) => category.toLowerCase());
-
-		setNewCategories(normalizedCategories);
 
 		const newWord: Word = {
 			term: term.toLowerCase(),
